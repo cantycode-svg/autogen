@@ -11,6 +11,8 @@ COPY python/packages/autogen-studio/frontend/yarn.lock ./
 RUN yarn install
 # Copy frontend source code
 COPY python/packages/autogen-studio/frontend/ ./
+# Ensure target directory exists for frontend rsync postbuild
+RUN mkdir -p /frontend/../autogenstudio/web/ui
 # Build frontend
 RUN yarn build
 # Main Python image
