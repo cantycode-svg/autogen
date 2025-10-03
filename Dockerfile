@@ -11,8 +11,6 @@ COPY python/packages/autogen-studio/frontend/yarn.lock ./
 RUN yarn install
 # Copy frontend source code
 COPY python/packages/autogen-studio/frontend/ ./
-# Create static asset directory
-RUN mkdir -p /frontend/../autogenstudio/web/ui
 # Build frontend
 RUN yarn build
 # Main Python image
@@ -32,5 +30,5 @@ WORKDIR $HOME/app
 COPY --chown=user . $HOME/app
 # Copy built frontend assets to the correct location for FastAPI static serving
 # AutoGen Studio typically serves static files from autogenstudio/web/ui/
-COPY --from=frontend-builder --chown=user /frontend/build/ $HOME/app/python/packages/autogen-studio/autogenstudio/web/ui/
+COPY --from=frontend-builder --chown=user /frontend/public/ $HOME/app/python/packages/autogen-studio/autogenstudio/web/ui/
 CMD gunicorn -w 1 --timeout 12600 -k uvicorn.workers.UvicornWorker autogenstudio.web.app:app --bind "0.0.0.0:8081"
