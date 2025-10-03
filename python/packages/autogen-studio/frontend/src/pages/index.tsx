@@ -4,8 +4,8 @@ import Layout from "../components/layout";
 
 // Landing page for AI Innovators Guild
 // Adds archetype selector and glowing Enter Guild CTA
-const archetypes = ["Builder", "Strategist", "Researcher", "Explorer"] as const;
 
+const archetypes = ["Builder", "Strategist", "Researcher", "Explorer"] as const;
 type Archetype = typeof archetypes[number];
 
 const IndexPage = ({ data }: any) => {
@@ -19,13 +19,13 @@ const IndexPage = ({ data }: any) => {
 
   return (
     <Layout title={title} link="/" meta={site}>
+      <div style={{display: 'none'}}>AIIG_MARKER_INDEX_2025</div>
       <main className="min-h-[calc(100vh-120px)] flex items-center justify-center bg-[#0B0A10] text-slate-100 relative overflow-hidden">
         {/* Runes background */}
         <div className="pointer-events-none absolute inset-0 opacity-20"
              style={{backgroundImage: 'url(/runes.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}/>
         {/* Cyber glow grid */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-purple-700/10 via-cyan-400/10 to-transparent"/>
-
         {/* Center card */}
         <div className="relative z-10 w-full max-w-3xl mx-4 p-8 rounded-2xl backdrop-blur-md border border-white/10 bg-white/5 shadow-[0_0_60px_rgba(124,58,237,0.25)]">
           <div className="flex items-center gap-3 mb-6">
@@ -35,7 +35,6 @@ const IndexPage = ({ data }: any) => {
           <p className="text-slate-300 leading-relaxed mb-6">
             {description}
           </p>
-
           {/* Archetype selector */}
           <label className="block text-sm mb-2 text-slate-300">Choose your archetype</label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
@@ -51,7 +50,6 @@ const IndexPage = ({ data }: any) => {
               >{a}</button>
             ))}
           </div>
-
           {/* Enter button */}
           <div className="flex items-center gap-4">
             <button onClick={enter}
