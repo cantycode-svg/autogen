@@ -2,7 +2,6 @@
 import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
-
 # import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,18 +27,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     Lifecycle manager for the FastAPI application.
     Handles initialization and cleanup of application resources.
     """
-
     try:
         # Initialize managers (DB, Connection, Team)
         await init_managers(initializer.database_uri, initializer.config_dir, initializer.app_root)
-
         await register_auth_dependencies(app, auth_manager)
-
         # Any other initialization code
         logger.info(
             f"Application startup complete. Navigate to http://{os.environ.get('AUTOGENSTUDIO_HOST', '127.0.0.1')}:{os.environ.get('AUTOGENSTUDIO_PORT', '8081')}"
         )
-
     except Exception as e:
         logger.error(f"Failed to initialize application: {str(e)}")
         raise
@@ -56,6 +51,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 auth_manager = init_auth_manager(initializer.config_dir)
+
 # Create FastAPI application
 app = FastAPI(lifespan=lifespan, debug=True)
 
@@ -72,6 +68,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app.add_middleware(AuthMiddleware, auth_manager=auth_manager)
 
 # Create API router with version and documentation
@@ -105,7 +102,6 @@ api.include_router(
     responses={404: {"description": "Not found"}},
 )
 
-
 api.include_router(
     ws.router,
     prefix="/ws",
@@ -133,6 +129,7 @@ api.include_router(
     tags=["gallery"],
     responses={404: {"description": "Not found"}},
 )
+
 # Include authentication routes
 api.include_router(
     authroutes.router,
@@ -155,9 +152,8 @@ api.include_router(
     responses={404: {"description": "Not found"}},
 )
 
+
 # Version endpoint
-
-
 @api.get("/version")
 async def get_version():
     """Get API version"""
@@ -169,8 +165,6 @@ async def get_version():
 
 
 # Health check endpoint
-
-
 @api.get("/health")
 async def health_check():
     """API health check endpoint"""
@@ -187,11 +181,9 @@ app.mount(
     StaticFiles(directory=initializer.static_root, html=True),
     name="files",
 )
-app.mount("/", StaticFiles(directory=initializer.ui_root, html=True), name="ui")
+app.mount("/", StaticFiles(directory="/home/user/app/python/packages/autogen-studio/autogenstudio/web/ui", html=True), name="ui")
 
 # Error handlers
-
-
 @app.exception_handler(500)
 async def internal_error_handler(request, exc):
     logger.error(f"Internal error: {str(exc)}")
