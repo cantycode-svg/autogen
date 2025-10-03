@@ -2,6 +2,8 @@
 FROM node:18-slim as frontend-builder
 # Set working directory for frontend
 WORKDIR /frontend
+# Install rsync for file operations
+RUN apt-get update && apt-get install -y rsync
 # Copy frontend package files
 COPY python/packages/autogen-studio/frontend/package*.json ./
 COPY python/packages/autogen-studio/frontend/yarn.lock ./
